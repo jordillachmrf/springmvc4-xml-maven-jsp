@@ -58,6 +58,48 @@
                 <target>${jdk.version}</target>
             </configuration>
         </plugin>
+        <plugin>
+            <groupId>io.leonard.maven.plugins</groupId>
+            <artifactId>jspc-maven-plugin</artifactId>
+            <version>2.4.5</version>
+            <executions>
+                <execution>
+                    <id>jspc</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <webAppSourceDirectory>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF</webAppSourceDirectory>
+                <webXmlFragment>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/webfrag.xml</webXmlFragment>
+                <generatedClasses>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/classes</generatedClasses>
+                <!-- https://tcollignon.github.io/2018/02/19/How-to-speed-up-JSP-compile-with-Tomcat-and-Maven-20.html -->
+                <!-- compilerClass>org.apache.jasper.compiler.ParallelJDTCompiler</compilerClass -->
+                <threads>2</threads>
+                <trimSpaces>false</trimSpaces>
+                <validateXml>false</validateXml>
+            </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-jasper</artifactId>
+                    <version>8.5.24</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.eclipse.jdt.core.compiler</groupId>
+                            <artifactId>ecj</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jdt.core.compiler</groupId>
+                    <artifactId>ecj</artifactId>
+                    <version>4.6.1</version>
+                </dependency>
+            </dependencies>
+        </plugin>
 
         <!-- embedded Jetty server, for testing -->
         <plugin>
